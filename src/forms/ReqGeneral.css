@@ -1,0 +1,21 @@
+.reqGeneral-container{
+    width: 20%;
+    height: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.reqGeneral-info{
+    display: flex;
+    flex-direction: column;
+}
+
+textarea {
+    width: 95%;
+    height: 200px;
+}
+select{
+    width: 40%;
+}
