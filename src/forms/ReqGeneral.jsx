@@ -80,7 +80,7 @@ export default function ReqGeneral({ req, profiles, code, newReqs,changeVisibili
             ))}
           </select>
         </div>
-        <button type="submit">Guardar</button>
+        <button className="buttonR" type="submit"> Guardar</button>
       </form>
     </div>
   );

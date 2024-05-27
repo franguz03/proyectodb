@@ -3,7 +3,7 @@
     width: 100%;
     align-items: center;
     height: 100%;
-    justify-content: center;
+    justify-content: space-around;
 
 }
 
@@ -62,10 +62,10 @@
 }
 
 .showReq{
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 50%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;

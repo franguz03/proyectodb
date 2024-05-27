@@ -34,7 +34,7 @@ export default function Phase7({ req }) {
       <h3>Candidatos con el 40% de las respuestas correctas</h3>
       <div className='listCA'>
         {results.map(test => (
-          <div key={test.USUARIO}>
+          <div key={test.USUARIO} className='testcand'>
             <p>{test.NOMBRE} {test.APELLIDO}</p>
             <p>{test.USUARIO}</p>
             <p>{test.IDTIPODOC_FK}--{test.NDOC}</p>

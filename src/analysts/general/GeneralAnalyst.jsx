@@ -90,7 +90,7 @@ export default function GeneralAnalyst({ data }) {
         <div className="reqsBar">
           {reqs.map((req, index) => (
             <button key={index} onClick={() => displayReq(req)}>
-              {req.CONSECREQUE}--{req.CODEMPLEADO_FK2}
+              {req.CONSECREQUE}--{data.NOMEMPLEADO}
             </button>
           ))}
         </div >

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { Message } from '../../shared/Message';
-// import './Phase5.css';
+import './Phase6.css';
 
 export default function Phase6({ req }) {
   const [process, setProcess] = useState({});
@@ -102,10 +102,10 @@ export default function Phase6({ req }) {
 
   // ShowHV function component to render historical data
   return (
-    <div ref={phaseContainer} className='phase4container'>
+    <div ref={phaseContainer} className='phase6container'>
       <div className='candidatesList'>
         <h3>Pruebas</h3>
-        <ul>
+        <ul className='listaT'>
           {tests.map(test => (
             <button key={test.IDPRUEBA} className='candidateButton' onClick={() => chooseCand(test)}>
               <p>{test.IDPRUEBA}</p>
@@ -114,8 +114,8 @@ export default function Phase6({ req }) {
         </ul>
       </div>
 
-      {visibility?<form onSubmit={handleSubmit} className='formPhase4'>
-        <div>
+      {visibility?<form onSubmit={handleSubmit} className='formPhase6'>
+        <div style={{display:"flex",flexDirection:"column"}}>
           <label htmlFor="fechapres">Fecha de Presentación:</label>
           <input
             type="date"
@@ -125,7 +125,7 @@ export default function Phase6({ req }) {
             onChange={handleChange}
           />
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" className='buttonT'>Submit</button>
       </form>: <></>}
 
       

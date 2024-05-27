@@ -42,14 +42,6 @@ function MainApp() {
     <div className="container">
       {!isAuthorized ? (
         <>
-          <header className="navbar">
-            <Link to="/tests">
-              <button>Añadir prueba</button>
-            </Link>
-            <Link to="/Analyst">
-              <button>Login analista Cliente</button>
-            </Link>
-          </header>
           <div className="logins">
             <AnalystForm
               changeAuthorization={changeAuthorization}
@@ -62,7 +54,6 @@ function MainApp() {
       ) : (
         <div className="analystContainer">
           <div className="analystBar">
-            <h2>Current Location: {location}</h2>
             <button
               style={{ marginRight: "15px" }}
               onClick={changeAuthorization}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import "./formStyles.css";
+import analista from "../images/analista.png"
 
 export default function AnalystForm({ changeAuthorization, setData, setLocation, setAnalysts }) {
   const [formData, setFormData] = useState({
@@ -62,6 +63,10 @@ export default function AnalystForm({ changeAuthorization, setData, setLocation,
 
   return (
     <form onSubmit={handleSubmit} className="form-container">
+      <h2>Ingresa como Analista</h2>
+    <div className="circular-div">
+    <img src={analista} alt="analista" />
+</div>
       <div>
         <label>
           <p>Code:</p>
