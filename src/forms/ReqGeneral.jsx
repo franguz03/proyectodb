@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import './ReqGeneral.css'
+import { Message } from "../shared/Message";
 
 export default function ReqGeneral({ req, profiles, code, newReqs,changeVisibility,changeReq }) {
   const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ export default function ReqGeneral({ req, profiles, code, newReqs,changeVisibili
     FECHAINICIO: "",
     CONSECREQUE_FK: req.CONSECREQUE
   });
-
+  const message = new Message();
 
   useEffect(() => {
     setFormData((prevFormData) => ({
@@ -36,7 +37,7 @@ export default function ReqGeneral({ req, profiles, code, newReqs,changeVisibili
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      if (req.PROCESS.length > 0) {
+      if (req.PROCESS && req.PROCESS.length > 0) {
         console.log("Este requerimiento ya está cargado");
       } else {
         console.log(formData);
@@ -51,6 +52,7 @@ export default function ReqGeneral({ req, profiles, code, newReqs,changeVisibili
         // Find the requirement with the matching CONSECREQUE
         const foundRequirement = processesR.data.find(item => item.CONSECREQUE === req.CONSECREQUE);
         changeReq(foundRequirement)
+        message.success('Información actualizada');
       }
     } catch (error) {
       console.error("Error al enviar la solicitud:", error);
@@ -59,7 +61,7 @@ export default function ReqGeneral({ req, profiles, code, newReqs,changeVisibili
   };
   return (
     <div className="reqGeneral-container">
-      <h2>Editar Requisición {req.CONSECREQUE}</h2>
+      <h2>Editar Requisito {req.CONSECREQUE}</h2>
       <form onSubmit={handleSubmit}>
         <div className="reqGeneral-info">
           <label htmlFor="IDPERFIL_FK">Perfil:</label>

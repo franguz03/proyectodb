@@ -83,3 +83,6 @@
 .convocatory-text{
     height: 60%;
 }
+.disabled {
+    background-color: rgb(129, 129, 129);
+}

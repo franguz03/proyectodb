@@ -13,10 +13,7 @@ export default function Phase7({ req }) {
 
   const fetchCandidates = async () => {
     try {
-      console.log(req);
-      console.log("id del proceso", process.IDPERFIL_FK);
       const route = `http://localhost:3000/tests/getWinners?profileId=${process.IDPERFIL_FK}&phaseId=6&reqConsec=${req.CONSECREQUE}&testId=2`;
-      console.log(route);
       const response = await axios.get(route);
       console.log("respuestas", response.data);
       setResults(response.data);
@@ -34,7 +31,7 @@ export default function Phase7({ req }) {
 
   return (
     <div className='phase7container'>
-      <h3>Candidatos con dos o más respuestas bien</h3>
+      <h3>Candidatos con el 40% de las respuestas correctas</h3>
       <div className='listCA'>
         {results.map(test => (
           <div key={test.USUARIO}>

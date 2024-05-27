@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { Message } from '../../shared/Message';
 // import './Phase5.css';
 
 export default function Phase6({ req }) {
@@ -7,6 +8,8 @@ export default function Phase6({ req }) {
   const [tests, setTests] = useState([]);
   const [selectedTest, setSelectedTest] = useState({});
   const [visibility, setVisibility] = useState(false);
+  const phaseContainer = useRef(null);
+  const message = new Message();
   const [formData2, setFormData2] = useState({
     IDPERFIL_FK: '',
     IDFASE_FK: '',
@@ -78,13 +81,19 @@ export default function Phase6({ req }) {
     };
 
     try {
-        console.log(formDataWithFormattedDate)
-      const response2 = await axios.post('http://localhost:3000/tests/createCandTest', formDataWithFormattedDate, {
+      await axios.post('http://localhost:3000/tests/createCandTest', formDataWithFormattedDate, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log('Form data2 submitted successfully:', response2.data);
+      console.log(formDataWithFormattedDate)
+
+      message.success('Prueba lista');
+      req.setDisabledPhases([true, true, true, true, true, true, false, true, true, true]);
+      req.setPhaseClasses(
+        ['disabled', 'disabled', 'disabled', 'disabled', 'disabled', 'disabled', '', 'disabled', 'disabled', 'disabled']
+      );
+      phaseContainer.current.style.display = 'none';
     } catch (error) {
       console.error('Error submitting form data:', error);
       // Optionally, handle error (e.g., show an error message)
@@ -93,7 +102,7 @@ export default function Phase6({ req }) {
 
   // ShowHV function component to render historical data
   return (
-    <div className='phase4container'>
+    <div ref={phaseContainer} className='phase4container'>
       <div className='candidatesList'>
         <h3>Pruebas</h3>
         <ul>

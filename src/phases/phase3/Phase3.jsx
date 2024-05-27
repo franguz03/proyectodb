@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './Phase3.css';
+import { Message } from '../../shared/Message';
 
 export default function Phase3({ req }) {
   const [process, setProcess] = useState({});
+  const phaseContainer = useRef(null);
+  const message = new Message();
 
   const [formData, setFormData] = useState({
     IDPERFIL_FK: '',
@@ -37,13 +40,17 @@ export default function Phase3({ req }) {
     e.preventDefault();
     console.log(formData)
     try {
-      const response = await axios.put('http://localhost:3000/requirements/updateReqProcess', formData, {
+      await axios.put('http://localhost:3000/requirements/updateReqProcess', formData, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log('Form data submitted successfully:', response.data);
-      // Optionally, handle success (e.g., show a notification or update the UI)
+      message.success('Convocatoria realizada');
+      req.setDisabledPhases([true, true, true, false, true, true, true, true, true, true]);
+      req.setPhaseClasses(
+        ['disabled', 'disabled', 'disabled', '', 'disabled', 'disabled', 'disabled', 'disabled', 'disabled', 'disabled']
+      );
+      phaseContainer.current.style.display = 'none';
     } catch (error) {
       console.error('Error submitting form data:', error);
       // Optionally, handle error (e.g., show an error message)
@@ -51,7 +58,7 @@ export default function Phase3({ req }) {
   };
 
   return (
-    <div className='phase3container'>
+    <div ref={phaseContainer} className='phase3container'>
       <form onSubmit={handleSubmit} className='formPhase3'>
         <div>
           <label htmlFor="convocatoria">Convocatoria:</label>

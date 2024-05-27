@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import './Phase4.css';
+import { Message } from '../../shared/Message';
 
 export default function Phase4({ req }) {
   const [process, setProcess] = useState({});
@@ -10,6 +11,8 @@ export default function Phase4({ req }) {
   const [showCand, setShowCand] = useState({});
   const now = new Date();
   const formattedDate = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
+  const phaseContainer = useRef(null);
+  const message = new Message();
   const [fromdata1, setFormData] = useState({
     IDPERFIL_FK: '',
     IDFASE_FK: '',
@@ -102,19 +105,22 @@ export default function Phase4({ req }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put('http://localhost:3000/requirements/updateReqProcess', fromdata1, {
+      await axios.put('http://localhost:3000/requirements/updateReqProcess', fromdata1, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log('Form data1 submitted successfully:', response.data);
-      console.log("data2",fromdata2)
-      const response2 = await axios.post('http://localhost:3000/candidates/createCandProcesses', fromdata2, {
+      await axios.post('http://localhost:3000/candidates/createCandProcesses', fromdata2, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log('Form data2 submitted successfully:', response2.data);
+      message.success('Invitación enviada');
+      req.setDisabledPhases([true, true, true, true, false, true, true, true, true, true]);
+      req.setPhaseClasses(
+        ['disabled', 'disabled', 'disabled', 'disabled', '', 'disabled', 'disabled', 'disabled', 'disabled', 'disabled']
+      );
+      phaseContainer.current.style.display = 'none';
     } catch (error) {
       console.error('Error submitting form data:', error);
       // Optionally, handle error (e.g., show an error message)
@@ -125,7 +131,7 @@ export default function Phase4({ req }) {
   const ShowHV = ({ hv ,name}) => {
     return (
       <div className='hv'>
-        <h3>Historial de Vida {name}</h3>
+        <h3>Historial de Vida de {name}</h3>
         {hv.map((item, index) => (
           <div key={index} className='hvItem'>
             <h1><strong>Tipo de Estudio:</strong> {item.DESCTIPOITEMPERFIL}</h1>
@@ -139,9 +145,9 @@ export default function Phase4({ req }) {
   };
 
   return (
-    <div className='phase4container'>
+    <div ref={phaseContainer} className='phase4container'>
       <div className='candidatesList'>
-        <h3>Candidates</h3>
+        <h3>Candidatos</h3>
         <ul>
           {candidates.map(candidate => (
             <div className='cadidatespace'>
@@ -164,7 +170,7 @@ export default function Phase4({ req }) {
 
       <form onSubmit={handleSubmit} className='formPhase4'>
         <div>
-          <label htmlFor="convocatoria">Convocatoria:</label>
+          <label htmlFor="convocatoria">Invitación:</label>
           <textarea
             id="convocatoria"
             value={fromdata1.INVITACION}

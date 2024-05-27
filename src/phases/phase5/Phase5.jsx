@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import './Phase5.css';
+import { Message } from '../../shared/Message';
 
 export default function Phase5({ req }) {
   const [process, setProcess] = useState({});
@@ -10,6 +11,8 @@ export default function Phase5({ req }) {
   const [showCand, setShowCand] = useState({});
   const now = new Date();
   const formattedDate = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
+  const phaseContainer = useRef(null);
+  const message = new Message();
   const [fromdata2, setFormData2] = useState({
     IDPERFIL_FK: '',
     IDFASE_FK: '6',
@@ -85,13 +88,18 @@ export default function Phase5({ req }) {
     e.preventDefault();
     
     try {
-          console.log("fase5",fromdata2)
-      const response2 = await axios.post('http://localhost:3000/candidates/createCandProcesses', fromdata2, {
+      await axios.post('http://localhost:3000/candidates/createCandProcesses', fromdata2, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log('Form data2 submitted successfully:', response2.data);
+
+      message.success('Candidatos preseleecionados con éxito');
+      req.setDisabledPhases([true, true, true, true, true, false, true, true, true, true]);
+      req.setPhaseClasses(
+        ['disabled', 'disabled', 'disabled', 'disabled', 'disabled', '', 'disabled', 'disabled', 'disabled', 'disabled']
+      );
+      phaseContainer.current.style.display = 'none';
     } catch (error) {
       console.error('Error submitting form data:', error);
       // Optionally, handle error (e.g., show an error message)
@@ -116,7 +124,7 @@ export default function Phase5({ req }) {
   };
 
   return (
-    <div className='phase4container'>
+    <div ref={phaseContainer} className='phase4container'>
       <div className='candidatesList'>
         <h3>Candidates</h3>
         <ul>

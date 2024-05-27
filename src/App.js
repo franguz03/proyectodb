@@ -3,6 +3,8 @@ import { Link, BrowserRouter, Route, useLocation } from "react-router-dom";
 import AnalystForm from "./forms/AnalystForm.jsx";
 import AnalystClient from "./analysts/client/ClientAnalyst.jsx";
 import GeneralAnalyst from "./analysts/general/GeneralAnalyst.jsx";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
 
 const ClientAnalystView = ({ analysts, data }) => (
@@ -71,6 +73,7 @@ function MainApp() {
           <div className="analystOperations">{renderContent()}</div>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 }

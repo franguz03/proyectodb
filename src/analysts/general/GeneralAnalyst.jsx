@@ -15,6 +15,10 @@ export default function GeneralAnalyst({ data }) {
   const [profiles, setProfiles] = useState([]);
   const [reqSelected, setReqSelected] = useState(null);
   const [selectedPhase, setSelectedPhase] = useState(null);
+  const [disabledPhases, setDisabledPhases] = useState([true, true, true, true, true, false, true, true, true, true]);
+  const [phaseClasses, setPhaseClasses] = useState(
+    ['disabled', 'disabled', 'disabled', 'disabled', 'disabled', '', 'disabled', 'disabled', 'disabled', 'disabled']
+  );
 
   const displayReq = (req) => {
     setIsDataVisible(true);
@@ -91,7 +95,7 @@ export default function GeneralAnalyst({ data }) {
           ))}
         </div >
         <div className="options">
-          {isDataVisible && reqSelected && reqSelected.PROCESS.length === 0 ? (
+          {isDataVisible && reqSelected && (!reqSelected.PROCESS || reqSelected.PROCESS.length === 0) ? (
             <div className="selectedReqInfo">
               <ReqGeneral req={reqSelected} profiles={profiles} code={data.CODEMPLEADO} newReqs={setReqs} changeVisibility={setIsDataVisible} changeReq={setReqSelected}/>
             </div>
@@ -99,14 +103,19 @@ export default function GeneralAnalyst({ data }) {
             <div className="phases">
               <div className="phaseBar">
                 {Array.from({ length: 10 }, (_, i) => i + 1).map(phase => (
-                  <button key={phase} onClick={() => handlePhaseClick(phase)}>
-                    Phase {phase}
+                  <button 
+                  disabled={disabledPhases[phase-1]} 
+                  className={phaseClasses[phase-1]} 
+                  key={phase} 
+                  onClick={() => handlePhaseClick(phase)}
+                  >
+                    Fase {phase}
                   </button>
                 ))}
               </div>
               {selectedPhase !== null && (
                 <div className="selectedPhaseInfo">
-                  {renderPhaseContent(selectedPhase,reqSelected)}
+                  {renderPhaseContent(selectedPhase, { ...reqSelected, setDisabledPhases, setPhaseClasses })}
                 </div>
               )}
             </div>
