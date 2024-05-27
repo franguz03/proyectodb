@@ -1,21 +1,27 @@
 .analystClient-form-container {
     display: flex;
-    justify-content: space-around;
     width: 100%;
     align-items: center;
+    height: 100%;
+    justify-content: center;
 
 }
 
 .form {
+    display: flex;
+    flex-direction: column;
+    align-items:left;
     width: 30%;
-    height: 100%;
-    padding: 10px;
+    height: 90%;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #f9f9f9;
 }
 
 .analystClient-input-field {
+    width: 90%;
+    height: 8px;
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -28,7 +34,7 @@
 }
 
 .analystClient-button {
-    padding: 10px;
+    height: 40px;
     background-color: #007BFF;
     color: #fff;
     border: none;
@@ -37,6 +43,8 @@
 }
 
 .analystClient-select-field {
+    width: 90%;
+    height: 10px;
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -48,9 +56,9 @@
     flex-direction: column;
 }
 
-textarea {
-    width: 95%;
-    height: 200px;
+.textarea {
+    width: 90%;
+    height: 70px;
 }
 
 .showReq{

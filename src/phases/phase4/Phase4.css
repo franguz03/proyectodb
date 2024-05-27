@@ -1,0 +1,41 @@
+.phase4container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-between;
+    border: 3px solid white;
+    height: 95%;
+    width: 100%;
+}
+
+.candidatesList {
+    width: 15%;
+    max-height: 95%;
+    overflow-y: scroll;
+}
+
+.candidatesList ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.candidatesList li {
+    margin: 10px 0;
+}
+
+.candidateButton {
+    display: block;
+    width: 100%;
+   
+}
+.cadidatespace{
+    display: flex;
+    width: 100%;
+}
+.candidateButton p {
+    margin: 0;
+}
+.hv{max-height: 95%;
+overflow-y: scroll;
+background-color: white;
+border: 2px solid black;}

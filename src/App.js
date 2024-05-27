@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  Link,
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import React, { useState } from "react";
+import { Link, BrowserRouter, Route, useLocation } from "react-router-dom";
 import AnalystForm from "./forms/AnalystForm.jsx";
 import AnalystClient from "./analysts/client/ClientAnalyst.jsx";
 import GeneralAnalyst from "./analysts/general/GeneralAnalyst.jsx";
@@ -15,50 +9,28 @@ const ClientAnalystView = ({ analysts, data }) => (
   <AnalystClient analysts={analysts} data={data} />
 );
 
-const GeneralAnalystView = ({reqs,data}) => <GeneralAnalyst reqs={reqs} data={data}/>;
+const GeneralAnalystView = ({  data }) => (
+  <GeneralAnalyst  data={data} />
+);
 
 const TestsView = () => <p>Estas es añadir pruebas</p>;
 
 function MainApp() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [data, setData] = useState();
-  const location = useLocation();
-  const analysts = [
-    { id: "1", name: "Analista 1" },
-    { id: "2", name: "Analista 2" },
-    { id: "3", name: "Analista 3" },
-  ];
-  const reqs = [
-    { desc: "Descripción del primer requerimiento" },
-    { desc: "Descripción del segundo requerimiento" },
-    { desc: "Descripción del tercer requerimiento" },
-    { desc: "Descripción del cuarto requerimiento" },
-    { desc: "Descripción del quinto requerimiento" },
-    { desc: "Descripción del primer requerimiento" },
-    { desc: "Descripción del segundo requerimiento" },
-    { desc: "Descripción del tercer requerimiento" },
-    { desc: "Descripción del cuarto requerimiento" },
-    { desc: "Descripción del quinto requerimiento" },
-    { desc: "Descripción del primer requerimiento" },
-    { desc: "Descripción del segundo requerimiento" },
-    { desc: "Descripción del tercer requerimiento" },
-    { desc: "Descripción del cuarto requerimiento" },
-    { desc: "Descripción del quinto requerimiento" }
-  ];
+  const [location, setLocation] = useState("");
+  const [analysts, setAnalysts]=useState([])
+
   const changeAuthorization = () => {
     setIsAuthorized((prev) => !prev);
   };
 
-  useEffect(() => {
-    console.log(isAuthorized);
-  }, [isAuthorized]);
-
   const renderContent = () => {
-    switch (location.pathname) {
+    switch (location) {
       case "/clientAnalyst":
         return <ClientAnalystView analysts={analysts} data={data} />;
       case "/generalAnalyst":
-        return <GeneralAnalystView reqs={reqs} data={data} />;
+        return <GeneralAnalystView  data={data} />;
       default:
         return <TestsView />;
     }
@@ -72,41 +44,23 @@ function MainApp() {
             <Link to="/tests">
               <button>Añadir prueba</button>
             </Link>
-            <Link to="/clientAnalyst">
+            <Link to="/Analyst">
               <button>Login analista Cliente</button>
-            </Link>
-            <Link to="/generalAnalyst">
-              <button>Login analista General</button>
             </Link>
           </header>
           <div className="logins">
-            <Routes>
-              <Route path="/tests" element={<h1>Estas en pruebas</h1>} />
-              <Route
-                path="/clientAnalyst"
-                element={
-                  <AnalystForm
-                    changeAuthorization={changeAuthorization}
-                    setData={setData}
-                  />
-                }
-              />
-              <Route
-                path="/generalAnalyst"
-                element={
-                  <AnalystForm
-                    changeAuthorization={changeAuthorization}
-                    setData={setData}
-                  />
-                }
-              />
-            </Routes>
+            <AnalystForm
+              changeAuthorization={changeAuthorization}
+              setData={setData}
+              setLocation={setLocation}
+              setAnalysts={setAnalysts}
+            />
           </div>
         </>
       ) : (
         <div className="analystContainer">
           <div className="analystBar">
-            <h2>Current Location: {location.pathname}</h2>
+            <h2>Current Location: {location}</h2>
             <button
               style={{ marginRight: "15px" }}
               onClick={changeAuthorization}

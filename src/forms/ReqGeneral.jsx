@@ -1,73 +1,79 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import './ReqGeneral.css'
 
-export default function ReqGeneral({ req, disciplines, profiles }) {
+export default function ReqGeneral({ req, profiles, code, newReqs,changeVisibility,changeReq }) {
   const [formData, setFormData] = useState({
-    description: req.desc || "", 
-    discipline: "",
-    profile: ""
+    IDPERFIL_FK: null,
+    FECHAINICIO: "",
+    CONSECREQUE_FK: req.CONSECREQUE
   });
 
- 
+
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      description: req.desc || ""
+      CONSECREQUE_FK: req.CONSECREQUE
     }));
   }, [req]);
+
+  useEffect(() => {
+    const now = new Date();
+    const formattedDate = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      FECHAINICIO: formattedDate,
+    }));
+  }, []);
+
+
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+    try {
+      if (req.PROCESS.length > 0) {
+        console.log("Este requerimiento ya está cargado");
+      } else {
+        console.log(formData);
+        await axios.post("http://localhost:3000/requirements/createReqProcesses", formData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const processesR = await axios.get(`http://localhost:3000/requirements/getByEmployeeCode/${code}`);
+        newReqs(processesR.data);
+  
+        // Find the requirement with the matching CONSECREQUE
+        const foundRequirement = processesR.data.find(item => item.CONSECREQUE === req.CONSECREQUE);
+        changeReq(foundRequirement)
+      }
+    } catch (error) {
+      console.error("Error al enviar la solicitud:", error);
+    }
+    changeVisibility();
   };
-
   return (
-    <div  className="reqGeneral-container">
-      <h2>Editar Requisición</h2>
+    <div className="reqGeneral-container">
+      <h2>Editar Requisición {req.CONSECREQUE}</h2>
       <form onSubmit={handleSubmit}>
         <div className="reqGeneral-info">
-          <label htmlFor="description">Descripción de Funciones:</label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            rows={4}
-          />
-        </div>
-        <div className="reqGeneral-info">
-          <label htmlFor="discipline">Disciplina:</label>
+          <label htmlFor="IDPERFIL_FK">Perfil:</label>
           <select
-            id="discipline"
-            name="discipline"
-            value={formData.discipline}
+            id="IDPERFIL_FK"
+            name="IDPERFIL_FK"
+            value={formData.IDPERFIL_FK}
             onChange={handleInputChange}
-          >
-            <option value="">Seleccionar Disciplina</option>
-            {disciplines.map((discipline) => (
-              <option key={discipline.id} value={discipline.name}>
-                {discipline.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="reqGeneral-info">
-          <label htmlFor="profile">Perfil:</label>
-          <select
-            id="profile"
-            name="profile"
-            value={formData.profile}
-            onChange={handleInputChange}
+            required
           >
             <option value="">Seleccionar Perfil</option>
-            {profiles.map((profile) => (
-              <option key={profile.id} value={profile.name}>
-                {profile.name}
+            {profiles.map((profile, index) => (
+              <option key={index} value={profile.IDPERFIL}>
+              {profile.IDPERFIL}--{profile.DESPERFIL}---{profile.DESCDISCIPLINA}
               </option>
             ))}
           </select>

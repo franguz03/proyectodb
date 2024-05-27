@@ -1,0 +1,11 @@
+.phase7container{
+    display: flex;
+    height: 95%;
+    width: 100%;
+    justify-content: space-around;
+}
+.listCA{
+    border:2px solid white;
+    max-height: 95%;
+    overflow-y: 1;
+}

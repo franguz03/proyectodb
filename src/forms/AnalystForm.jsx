@@ -1,34 +1,60 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import "./formStyles.css";
 
-export default function AnalystForm({ changeAuthorization,setData }) {
+export default function AnalystForm({ changeAuthorization, setData, setLocation, setAnalysts }) {
   const [formData, setFormData] = useState({
-    code: "",
-    firstName: "",
-    lastName: "",
-    email: "",
+    CODEMPLEADO: "",
+    CORREO: "",
   });
+
+  const changeLocation = (title) => {
+    let actualRute;
+    if (title === "Analista Cliente") {
+      actualRute = "/clientAnalyst";
+    } else if (title === "Analista General") {
+      actualRute = "/generalAnalyst";
+    } else {
+      actualRute = "/defaultRoute"; // Define a default route or handle the unexpected title
+    }
+    setLocation(actualRute);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedFormData = {
+    setFormData({
       ...formData,
-      [name]: value,
-    };
-    setFormData(updatedFormData);
+      [name]: String(value), // Asegura que el valor sea una cadena
+    });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Basic validation
-    if (
-      formData.code &&
-      formData.firstName &&
-      formData.lastName &&
-      formData.email
-    ) {
-      setData(formData)
-      changeAuthorization();
+    if (formData.CODEMPLEADO && formData.CORREO) {
+      try {
+        const response = await axios.post('http://localhost:3000/employees/logIn', formData, {
+          headers: {
+            'Content-Type': 'application/json', // Asegura que el contenido es JSON
+          },
+        });
+        setData(response.data.employee);
+        console.log(response.data.employee)
+        let title = response.data.employee.DESCTIPOCARGO;
+
+        // Change location based on title
+        changeLocation(title);
+
+
+        if (title === "Analista Cliente") {
+          const analystsResponse = await axios.get('http://localhost:3000/employees/getGeneralAnalysts');
+          setAnalysts(analystsResponse.data);
+        }
+
+        changeAuthorization();
+      } catch (error) {
+        console.error('There was a problem with the axios operation:', error);
+      }
     } else {
       alert("All fields are required");
     }
@@ -39,50 +65,24 @@ export default function AnalystForm({ changeAuthorization,setData }) {
       <div>
         <label>
           <p>Code:</p>
-
           <input
             type="text"
-            name="code"
-            value={formData.code}
+            name="CODEMPLEADO"
+            value={formData.CODEMPLEADO}
             onChange={handleChange}
             required
             className="form-input"
           />
         </label>
       </div>
-      <div>
-        <label>
-          <p>First Name:</p>
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-            className="form-input"
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          <p>Last Name:</p>
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-            className="form-input"
-          />
-        </label>
-      </div>
+    
       <div>
         <label>
           <p>Email:</p>
           <input
             type="email"
-            name="email"
-            value={formData.email}
+            name="CORREO"
+            value={formData.CORREO}
             onChange={handleChange}
             required
             className="form-input"
